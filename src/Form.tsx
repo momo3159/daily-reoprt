@@ -1,54 +1,25 @@
+import { PROPERTY_TYPES } from "@babel/types";
 import React, { FC, useState } from "react";
 import { pushReport } from "./firebase";
 import { reportRef, updateReport } from "./firebase";
 
-const formatDate = (date: Date) => {
-  const y = date.getFullYear();
-  const m = ("00" + (date.getMonth() + 1)).slice(-2);
-  const d = ("00" + date.getDate()).slice(-2);
-
-  return `${y}-${m}-${d}`;
-};
-
-type Report = {
-  date: string;
+type buttonLabel = "register" | "update";
+type Props = {
   text: string;
+  date: string;
+  label: buttonLabel;
+  onClick: (text: string, date: string) => void;
 };
 
-type FetchedData = {
-  [key: string]: Report;
-} | null;
-
-const clickHandler = (text: string) => {
-  reportRef
-    .orderByChild("date")
-    .equalTo(formatDate(new Date()))
-    .once("value", (snapshot) => {
-      const data: FetchedData = snapshot.val();
-      if (data == null) {
-        pushReport({ date: formatDate(new Date()), text });
-      } else {
-        const key = Object.keys(data)[0]
-        
-        const response = window.confirm(
-          "データが既に存在しています。追記しますか？"
-        );
-        if (response) {
-          updateReport({ key, date: formatDate(new Date()), text: data[key].text + text });
-        }
-      }
-    });
-};
-const Form: FC = () => {
-  const [text, setText] = useState("write what you did today");
+const Form: FC<Props> = ({ text, date, label, onClick }) => {
+  const [currentText, setText] = useState(text);
   return (
     <div>
       <textarea
-        value={text}
-        onChange={(e) => setText((text) => (text = e.target.value))}
-      >
-      </textarea>
-      <button onClick={() => clickHandler(text)}>登録</button>
+        value={currentText}
+        onChange={(e) => setText((current) => (current = e.target.value))}
+      ></textarea>
+      <button onClick={() => onClick(currentText, date)}>{label}</button>
     </div>
   );
 };
