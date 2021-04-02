@@ -1,9 +1,8 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC } from "react";
 import { reportRef, updateReport } from "./firebase";
 import Form from "./Form";
 import { formatDate } from "./util/day";
 import { FetchedData } from "./types";
-import { pushReport } from "./firebase";
 
 type Props = {
   date: string;
@@ -35,9 +34,18 @@ const Mordal: FC<Props> = ({ date, text, isShow, modalStateChanger }) => {
   };
 
   return isShow ? (
-    <div className="z-30 absolute m m-auto	left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2;">
-      <button onClick={() => modalStateChanger(false)}>x 閉じる</button>
-      <Form label="update" text={text} date={date} onClick={handler} />
+    <div className="absolute inset-0  bg-gray-900 bg-opacity-80">
+      <div className="w-2/3 h-4/6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50">
+        <div className="h-full grid grid-cols-4 grid-rows-1-10-1">
+          <button
+            onClick={() => modalStateChanger(false)}
+            className="text-right rounded-full focus:outline-none col-start-4 col-end-5"
+          >
+            <span className="text-2xl pr-2 text-gray-700">×</span>
+          </button>
+          <Form label="update" text={text} date={date} onClick={handler} />
+        </div>
+      </div>
     </div>
   ) : null;
 };

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { reportRef, pushReport, updateReport } from "./firebase";
 import Header from "./Header";
 import Card from "./Card";
-import Form from "./Form";
 import { FetchedData, Report } from "./types";
 import { formatDate } from "./util/day";
 
@@ -51,21 +50,23 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen relative">
       <Header />
       <main className="w-10/12 mx-auto">
-        <Form
+        {/* <Form
           text={"今日は何をしましたか？"}
           date={formatDate(new Date())}
           label="register"
           onClick={handler}
-        />
-        
-        {reports?.map((report) => (
-          <Card date={report.date} text={report.text} key={report.date} />
-        ))}
+        /> */}
+
+        <div>
+          {reports?.map((report) => (
+            <Card date={report.date} text={report.text} key={report.date} />
+          ))}
+        </div>
       </main>
-    </>
+    </div>
   );
 };
 

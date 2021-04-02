@@ -1,10 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { reportRef, updateReport } from "./firebase";
-import Form from "./Form";
 import Modal from "./Mordal"
-import { formatDate } from "./util/day";
-import { FetchedData } from "./types";
-import { pushReport } from "./firebase";
 
 type Props = {
   date: string;
@@ -25,7 +20,7 @@ const Card: FC<Props> = ({ date, text }) => {
         <div className="col-start-6 col-end-7"></div>
         <button
           onClick={() => setModalState(true)}
-          className="bg-green-500 hover:bg-green-700 rounded-xl w-3/4 mx-auto mt-2 mb-2 col-start-6 col-end-7 "
+          className="bg-green-500 hover:bg-green-700 rounded-xl w-3/4 focus:outline-none mx-auto col-start-6 col-end-7 "
         >
           edit
         </button>
