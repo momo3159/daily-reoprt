@@ -28,6 +28,14 @@ export const pushReport = ({ date, text }: { date: string; text: string }) => {
   reportRef.push({ date, text });
 };
 
-export const updateReport = ({ key, date, text }: { key: string, date: string; text: string }) => {
-  database.ref(`daily-report/${key}`).update({ date, text });
+export const updateReport = ({
+  key,
+  date,
+  text,
+}: {
+  key: string;
+  date: string;
+  text: string;
+}) => {
+  return database.ref(`daily-report/${key}`).update({ date, text });
 };

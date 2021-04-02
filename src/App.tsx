@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { reportRef, pushReport, updateReport } from "./firebase";
+import Header from "./Header";
 import Card from "./Card";
 import Form from "./Form";
 import { FetchedData, Report } from "./types";
@@ -30,6 +31,7 @@ const handler = (text: string, date: string) => {
 
 const App = () => {
   const [reports, setReports] = useState<Report[] | null>([]);
+  const [isModalOpen, setModalState] = useState(false);
 
   useEffect(() => {
     reportRef
@@ -50,15 +52,19 @@ const App = () => {
 
   return (
     <>
-      <Form
-        text={"今日は何をしましたか？"}
-        date={formatDate(new Date())}
-        label="register"
-        onClick={handler}
-      />
-      {reports?.map((report) => (
-        <Card date={report.date} text={report.text} key={report.date} />
-      ))}
+      <Header />
+      <main className="w-10/12 mx-auto">
+        <Form
+          text={"今日は何をしましたか？"}
+          date={formatDate(new Date())}
+          label="register"
+          onClick={handler}
+        />
+        
+        {reports?.map((report) => (
+          <Card date={report.date} text={report.text} key={report.date} />
+        ))}
+      </main>
     </>
   );
 };
