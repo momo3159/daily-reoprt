@@ -1,14 +1,40 @@
 import React, { FC, useState, useEffect } from "react";
-import Modal from "./Mordal"
+import Modal from "./Mordal";
+import { reportRef, updateReport } from "./firebase";
+import Form from "./Form";
+import { formatDate } from "./util/day";
+import { FetchedData } from "./types";
+import {loginState} from "./recoilState";
+import { useRecoilValue } from "recoil";
 
 type Props = {
   date: string;
   text: string;
 };
 
-
 const Card: FC<Props> = ({ date, text }) => {
   const [isModalOpen, setModalState] = useState(false);
+  const doesLogin = useRecoilValue(loginState);
+  const handler = (text: string, date: string) => {
+    reportRef
+      .orderByChild("date")
+      .equalTo(date)
+      .once("value", async (snapshot) => {
+        const data: FetchedData = snapshot.val();
+
+        if (data === null) {
+          return;
+        }
+        const key = Object.keys(data)[0];
+
+        await updateReport({
+          key,
+          date: formatDate(new Date()),
+          text,
+        });
+        setModalState(false);
+      });
+  };
 
   return (
     <>
@@ -18,14 +44,18 @@ const Card: FC<Props> = ({ date, text }) => {
           {text}
         </p>
         <div className="col-start-6 col-end-7"></div>
-        <button
-          onClick={() => setModalState(true)}
-          className="bg-green-500 hover:bg-green-700 rounded-xl w-3/4 focus:outline-none mx-auto col-start-6 col-end-7 "
-        >
-          edit
-        </button>
+        {doesLogin && (
+          <button
+            onClick={() => setModalState(true)}
+            className="bg-green-500 hover:bg-green-700 rounded-xl w-3/4 focus:outline-none mx-auto col-start-6 col-end-7 "
+          >
+            edit
+          </button>
+        )}
       </div>
-      <Modal date={date} text={text} isShow={isModalOpen} modalStateChanger={setModalState} />
+      <Modal isShow={isModalOpen} modalStateChanger={setModalState}>
+        <Form label="update" text={text} date={date} onClick={handler} />
+      </Modal>
     </>
   );
 };

@@ -1,5 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/database";
+import 'firebase/auth';
+
 const {
   REACT_APP_FIREBASE_API_KEY,
   REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -22,6 +24,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+const auth = firebase.auth();
 export const reportRef = database.ref("daily-report");
 
 export const pushReport = ({ date, text }: { date: string; text: string }) => {
@@ -38,4 +41,25 @@ export const updateReport = ({
   text: string;
 }) => {
   return database.ref(`daily-report/${key}`).update({ date, text });
+};
+
+export const signInWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
+  try {
+    const userCredential = await auth.signInWithEmailAndPassword(
+      email,
+      password
+    );
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const signOut = async () => {
+  await firebase.auth().signOut();
 };

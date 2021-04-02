@@ -4,6 +4,14 @@ import Header from "./Header";
 import Card from "./Card";
 import { FetchedData, Report } from "./types";
 import { formatDate } from "./util/day";
+import Mordal from "./Mordal";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
 
 const handler = (text: string, date: string) => {
   reportRef
@@ -28,9 +36,9 @@ const handler = (text: string, date: string) => {
     });
 };
 
+
 const App = () => {
   const [reports, setReports] = useState<Report[] | null>([]);
-  const [isModalOpen, setModalState] = useState(false);
 
   useEffect(() => {
     reportRef
@@ -50,23 +58,18 @@ const App = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative">
-      <Header />
-      <main className="w-10/12 mx-auto">
-        {/* <Form
-          text={"今日は何をしましたか？"}
-          date={formatDate(new Date())}
-          label="register"
-          onClick={handler}
-        /> */}
-
-        <div>
-          {reports?.map((report) => (
-            <Card date={report.date} text={report.text} key={report.date} />
-          ))}
-        </div>
-      </main>
-    </div>
+    <RecoilRoot>
+      <div className="min-h-screen relative">
+        <Header />
+        <main className="w-10/12 mx-auto">
+          <div>
+            {reports?.map((report) => (
+              <Card date={report.date} text={report.text} key={report.date} />
+            ))}
+          </div>
+        </main>
+      </div>
+    </RecoilRoot>
   );
 };
 
