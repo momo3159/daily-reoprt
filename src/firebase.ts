@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/database";
-import 'firebase/auth';
+import "firebase/auth";
 
 const {
   REACT_APP_FIREBASE_API_KEY,
@@ -23,24 +23,34 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+export const database = firebase.database();
 const auth = firebase.auth();
-export const reportRef = database.ref("daily-report");
+// export const reportRef = database.ref(`daily-report`);
 
-export const pushReport = ({ date, text }: { date: string; text: string }) => {
-  reportRef.push({ date, text });
+export const pushReport = ({
+  date,
+  text,
+  uid,
+}: {
+  date: string;
+  text: string;
+  uid: string;
+}) => {
+  database.ref(`daily-report/${uid}`).push({ date, text });
 };
 
 export const updateReport = ({
   key,
   date,
   text,
+  uid,
 }: {
   key: string;
   date: string;
   text: string;
+  uid: string;
 }) => {
-  return database.ref(`daily-report/${key}`).update({ date, text });
+  return database.ref(`daily-report/${uid}/${key}`).update({ date, text });
 };
 
 export const signInWithEmailAndPassword = async (
@@ -53,10 +63,10 @@ export const signInWithEmailAndPassword = async (
       password
     );
 
-    return true;
+    return userCredential.user?.uid;
   } catch (error) {
     console.log(error);
-    return false;
+    return undefined;
   }
 };
 

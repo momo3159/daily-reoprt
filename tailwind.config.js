@@ -6,11 +6,14 @@ module.exports = {
       gridTemplateRows: {
         "1-10-1": "1fr 10fr 1fr",
         "10-1": "10fr 1fr",
+        "1-10": "1fr 10fr",
       },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography')
+  ],
 };

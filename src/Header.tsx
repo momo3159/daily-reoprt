@@ -1,9 +1,18 @@
 import React, { FC, useState } from "react";
-import { signInWithEmailAndPassword, signOut } from "./firebase";
+import {
+  database,
+  pushReport,
+  signInWithEmailAndPassword,
+  signOut,
+  updateReport,
+} from "./firebase";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import Modal from "./Mordal";
 
 import { loginState } from "./recoilState";
+import { FetchedData } from "./types";
+import { formatDate } from "./util/day";
+import Form from "./Form";
 
 const Header: FC = () => {
   const [isModalOpen, setModalState] = useState(false);
@@ -11,32 +20,61 @@ const Header: FC = () => {
   const [password, setPassword] = useState("");
 
   const setLoginState = useSetRecoilState(loginState);
-  const doesLogin = useRecoilValue(loginState);
+  const uid = useRecoilValue(loginState);
 
   const signIn = async (email: string, password: string) => {
-    alert("called");
-    const isLoginSuccess = await signInWithEmailAndPassword(email, password);
-    if (isLoginSuccess) {
-      alert("success");
-      setLoginState(true);
+    const uid = await signInWithEmailAndPassword(email, password);
+    if (uid) {
+      setLoginState(uid);
     } else {
-      alert("fail");
-      setLoginState(false);
+      // TODO: エラーハンドル
+      setLoginState("");
     }
 
     setModalState(false);
   };
+
   const signOutHandler = async () => {
     await signOut();
-    setLoginState(false);
+    setLoginState("");
+  };
+
+  const handler = (text: string, date: string) => {
+    database.ref(`daily-report/${uid}`)
+      .orderByChild("date")
+      .equalTo(date)
+      .once("value", (snapshot) => {
+        const data: FetchedData = snapshot.val();
+
+        if (data === null) {
+          pushReport({ uid, text, date });
+          setModalState(false);
+        } else {
+          const response = window.confirm(
+            "すでに本日の記録が存在します。上書きされますがよろしいですか？"
+          );
+          if (!response) return;
+
+          const key = Object.keys(data)[0];
+          updateReport({
+            key,
+            date: formatDate(new Date()),
+            text,
+            uid,
+          });
+        }
+      });
   };
 
   return (
-    <div className="bg-green-400 h-20 grid grid-cols-4">
+    <div className="bg-green-400 h-20 grid grid-cols-2">
       <h1 className="text-2xl md:text-4xl m-auto ml-2">DAILY REPORT</h1>
-      {doesLogin ? (
+      {uid ? (
         <>
-          <button className="col-start-3 text-right mt-12 mr-2">
+          <button
+            onClick={() => setModalState(true)}
+            className="col-start-3 text-right mt-12 mr-2"
+          >
             登録する
           </button>
           <button
@@ -45,6 +83,14 @@ const Header: FC = () => {
           >
             ログアウト
           </button>
+          <Modal isShow={isModalOpen} modalStateChanger={setModalState}>
+            <Form
+              label="register"
+              text=""
+              date={formatDate(new Date())}
+              onClickHandler={handler}
+            />
+          </Modal>
         </>
       ) : (
         <>
@@ -73,12 +119,18 @@ const Header: FC = () => {
                     setPassword((current) => (current = e.target.value))
                   }
                 />
-                <button className="w-1/3 md:w-1/5 mx-auto bg-green-500 hover:bg-green-700 rounded-xl focus:outline-none" onClick={() => signIn(email, password)}>
+                <button
+                  className="w-1/3 md:w-1/5 mx-auto bg-green-500 hover:bg-green-700 rounded-xl focus:outline-none"
+                  onClick={() => signIn(email, password)}
+                >
                   ログイン
                 </button>
               </div>
             </div>
           </Modal>
+          {
+            // TODO: ローディングGIF
+          }
         </>
       )}
     </div>
