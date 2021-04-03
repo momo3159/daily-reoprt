@@ -102,20 +102,29 @@ const App = () => {
       <main className="h-full w-10/12 mx-auto mt-10">
         {
           // TODO: ローディングGIF
+          uid === "" ? (
+            <div className="loader" key={0}>
+              ログインしてください
+            </div>
+          ) : undefined
         }
         <InfiniteScroll
           className="h-full"
           loadMore={(page: number) => getReports(uid)}
           hasMore={hasMore}
           loader={
-            <div className="loader" key={0}>
-              Loading ...
-            </div>
+            uid !== "" ? (
+              <div className="loader" key={0}>
+                Loading ...
+              </div>
+            ) : undefined
           }
         >
-          {reports?.map((report) => (
-            <Card date={report.date} text={report.text} key={report.date} />
-          ))}
+          {reports?.map((report) =>
+            uid !== "" ? (
+              <Card date={report.date} text={report.text} key={report.date} />
+            ) : null
+          )}
         </InfiniteScroll>
       </main>
     </>
