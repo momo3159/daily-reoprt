@@ -1,0 +1,68 @@
+
+.markdown h1 {
+  font-size: 35px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+
+.markdown h2 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.markdown h3 {
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+.markdown h4 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.markdown h5 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.markdown h6 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.markdown hr {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.markdown p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+
+.markdown li {
+  margin-top: 0px;
+  margin-bottom: 0px;
+} 
+
+
+.markdown ul ul {  
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.markdown ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.markdown ul ul ul{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.markdown ul ul ul ul{
+  
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+
