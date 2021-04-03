@@ -40,7 +40,8 @@ const Header: FC = () => {
   };
 
   const handler = (text: string, date: string) => {
-    database.ref(`daily-report/${uid}`)
+    database
+      .ref(`daily-report/${uid}`)
       .orderByChild("date")
       .equalTo(date)
       .once("value", (snapshot) => {

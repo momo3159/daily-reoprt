@@ -5,4 +5,4 @@ export type Report = {
 
 export type FetchedData = {
   [key: string]: Report;
-} | null;
+};

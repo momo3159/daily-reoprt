@@ -8,12 +8,14 @@ module.exports = {
         "10-1": "10fr 1fr",
         "1-10": "1fr 10fr",
       },
+      height: {
+        "h-half-screen": "50vh",
+        "h-fit": "fit-content",
+      },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [
-    require('@tailwindcss/typography')
-  ],
+  plugins: [require("@tailwindcss/typography")],
 };

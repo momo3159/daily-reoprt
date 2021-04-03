@@ -26,6 +26,25 @@ firebase.initializeApp(firebaseConfig);
 export const database = firebase.database();
 const auth = firebase.auth();
 // export const reportRef = database.ref(`daily-report`);
+export const getLastKey = async (uid: string) => {
+  database
+    .ref(`daily-report/${uid}`)
+    .orderByKey()
+    .limitToLast(1)
+    .on("value", (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+
+      return Object.keys(data)[0];
+      // if (data === null) return;
+
+      // const newReports = Object.entries(data).map((obj) => {
+      //   const [, report] = obj;
+      //   return { ...report };
+      // });
+      // setReports(newReports);
+    });
+};
 
 export const pushReport = ({
   date,
