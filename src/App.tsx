@@ -13,6 +13,7 @@ const App = () => {
   const [lastKey, setLastKey] = useState<string>("");
   const [nextDate, setNextDate] = useState<string>("2021-04-10");
   const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const uid = useRecoilValue(loginState);
   const [, setYOffSet] = useRecoilState(yOffSetState);
 
@@ -30,11 +31,13 @@ const App = () => {
         else {
           const copy = data as FetchedData;
           setLastKey(copy[key]["date"]);
+          console.log(copy[key]["date"]);
         }
       });
   };
 
   const getReports = async (uid: string) => {
+    setIsFetching(true);
     database
       .ref(`daily-report/${uid}`)
       .orderByChild("date")
@@ -54,11 +57,6 @@ const App = () => {
             return report;
           })
           .reverse();
-        if (reports.length !== 0) {
-          setReports([...reports, ...newReports]);
-        } else {
-          setReports(newReports);
-        }
 
         if (newReports[newReports?.length - 1]["date"] === lastKey) {
           setHasMore(false);
@@ -68,13 +66,19 @@ const App = () => {
           new Date(newReports[newReports.length - 1]["date"]).getTime() -
           24 * 2600 * 1000;
         setNextDate(formatDate(new Date(next)));
+
+        if (reports.length !== 0) {
+          setReports([...reports, ...newReports]);
+        } else {
+          setReports(newReports);
+        }
+        setIsFetching(false);
       });
   };
 
   useEffect(() => {
     if (uid) {
       getLastKey(uid);
-      getReports(uid);
     }
   }, [uid]);
 
@@ -94,7 +98,7 @@ const App = () => {
     //   },
     //   true
     // );
-  }, []);
+  });
 
   return (
     <>
@@ -106,26 +110,31 @@ const App = () => {
             <div className="loader" key={0}>
               ログインしてください
             </div>
-          ) : undefined
+          ) : (
+            <InfiniteScroll
+              className="h-full"
+              loadMore={(page: number) => getReports(uid)}
+              hasMore={!isFetching && hasMore}
+              loader={
+                uid !== "" ? (
+                  <div className="loader" key={0}>
+                    Loading ...
+                  </div>
+                ) : undefined
+              }
+            >
+              {reports?.map((report) =>
+                uid !== "" ? (
+                  <Card
+                    date={report.date}
+                    text={report.text}
+                    key={report.date}
+                  />
+                ) : null
+              )}
+            </InfiniteScroll>
+          )
         }
-        <InfiniteScroll
-          className="h-full"
-          loadMore={(page: number) => getReports(uid)}
-          hasMore={hasMore}
-          loader={
-            uid !== "" ? (
-              <div className="loader" key={0}>
-                Loading ...
-              </div>
-            ) : undefined
-          }
-        >
-          {reports?.map((report) =>
-            uid !== "" ? (
-              <Card date={report.date} text={report.text} key={report.date} />
-            ) : null
-          )}
-        </InfiniteScroll>
       </main>
     </>
   );
