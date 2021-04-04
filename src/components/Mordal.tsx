@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useRecoilValue } from "recoil";
-import { yOffSetState } from "./recoilState";
+import { yOffSetState } from "../recoilState";
 
 type Props = {
   isShow: boolean;

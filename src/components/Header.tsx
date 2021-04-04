@@ -5,13 +5,13 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateReport,
-} from "./firebase";
+} from "../util/firebase";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import Modal from "./Mordal";
 
-import { loginState } from "./recoilState";
-import { FetchedData } from "./types";
-import { formatDate } from "./util/day";
+import { loginState } from "../recoilState";
+import { FetchedData } from "../types";
+import { formatDate } from "../util/day";
 import Form from "./Form";
 
 const Header: FC = () => {
