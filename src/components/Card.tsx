@@ -1,12 +1,12 @@
 import React, { FC, useState } from "react";
 import Modal from "./Mordal";
-import { database, updateReport } from "./firebase";
+import { database, updateReport } from "../util/firebase";
 import Form from "./Form";
-import { formatDate } from "./util/day";
-import { FetchedData } from "./types";
-import { loginState } from "./recoilState";
+import { formatDate } from "../util/day";
+import { FetchedData } from "../types";
+import { loginState } from "../recoilState";
 import { useRecoilValue } from "recoil";
-import parser from "./mdParser";
+import parser from "../util/mdParser";
 import MarkDown from "./MarkDown";
 
 type Props = {

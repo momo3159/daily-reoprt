@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { database } from "./firebase";
+import { database } from "../util/firebase";
 import Header from "./Header";
 import Card from "./Card";
-import { FetchedData, Report } from "./types";
+import { FetchedData, Report } from "../types";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginState, yOffSetState } from "./recoilState";
+import { loginState, yOffSetState } from "../recoilState";
 import InfiniteScroll from "react-infinite-scroller";
-import { formatDate } from "./util/day";
+import { formatDate } from "../util/day";
 
 const App = () => {
   const [reports, setReports] = useState<Report[]>([]);

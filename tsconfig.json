@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "src/firebase.ts"  ]
+, "src/util/firebase.ts"  ]
 }
