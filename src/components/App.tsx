@@ -11,7 +11,7 @@ import { formatDate } from "../util/day";
 const App = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [lastKey, setLastKey] = useState<string>("");
-  const [nextDate, setNextDate] = useState<string>("2021-04-10");
+  const [nextDate, setNextDate] = useState<string>(formatDate(new Date()));
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const uid = useRecoilValue(loginState);
