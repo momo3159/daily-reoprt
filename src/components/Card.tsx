@@ -34,7 +34,7 @@ const Card: FC<Props> = ({ date, text }) => {
         await updateReport({
           uid,
           key,
-          date: formatDate(new Date()),
+          date,
           text,
         });
         setModalState(false);

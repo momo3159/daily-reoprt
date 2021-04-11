@@ -18,6 +18,7 @@ const Header: FC = () => {
   const [isModalOpen, setModalState] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [date, setDate] = useState(formatDate(new Date()));
 
   const setLoginState = useSetRecoilState(loginState);
   const uid = useRecoilValue(loginState);
@@ -85,12 +86,13 @@ const Header: FC = () => {
             ログアウト
           </button>
           <Modal isShow={isModalOpen} modalStateChanger={setModalState}>
-            <Form
-              label="register"
-              text=""
-              date={formatDate(new Date())}
-              onClickHandler={handler}
-            />
+            <Form label="register" text="" date={date} onClickHandler={handler}>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </Form>
           </Modal>
         </>
       ) : (

@@ -8,10 +8,11 @@ type Props = {
   onClickHandler: (text: string, date: string) => void;
 };
 
-const Form: FC<Props> = ({ text, date, label, onClickHandler }) => {
+const Form: FC<Props> = ({ text, date, label, onClickHandler, children }) => {
   const [currentText, setText] = useState(text);
   return (
-    <div className="grid grid-cols-1 gap-4 grid-rows-10-1 h-full">
+    <div className="grid grid-cols-1 gap-4 grid-rows-1-10-1 h-full">
+      <div className="ml-2.5 md:ml-10">{children}</div>
       <textarea
         className="resize-none w-11/12 mx-auto shadow-md bd-round focus:outline-none focus:ring-2 focus: ring-green-400"
         value={currentText}

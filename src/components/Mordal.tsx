@@ -9,7 +9,6 @@ type Props = {
 
 const Mordal: FC<Props> = ({ isShow, modalStateChanger, children }) => {
   const yOffSet = useRecoilValue(yOffSetState);
-
   return isShow ? (
     <div
       style={{ top: yOffSet, height: window.innerHeight + yOffSet }}
